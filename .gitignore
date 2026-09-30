@@ -13,9 +13,7 @@ portal-config.json
 .env
 .env.*
 
-# Python runtime and local tooling.
-__pycache__/
-*.py[cod]
-.venv/
+# Rust build output and local tooling.
+target/
 .idea/
 .vscode/

@@ -1,5 +1,8 @@
 * text=auto
-*.py text eol=lf
+*.rs text eol=lf
+*.toml text eol=lf
+Cargo.lock text eol=lf
+*.exe binary
 *.md text eol=lf
 *.cmd text eol=crlf
 .gitignore text eol=lf
