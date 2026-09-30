@@ -1,0 +1,21 @@
+# Local credentials, account identifiers, network details and task metadata.
+state/
+work/
+credentials*.json
+*.log
+*.log.*
+run.lock
+scheduled-task.xml
+*-validation.xml
+portal-*.html
+portal-status.json
+portal-config.json
+.env
+.env.*
+
+# Python runtime and local tooling.
+__pycache__/
+*.py[cod]
+.venv/
+.idea/
+.vscode/
