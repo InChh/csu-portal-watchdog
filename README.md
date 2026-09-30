@@ -2,10 +2,20 @@
 
 中南大学校园网自动认证脚本。Windows 计划任务每 5 分钟检查外网，确认终端认证离线后尝试一次 HTTPS Portal 登录。使用 Python 标准库，无需第三方依赖。
 
+## 前置要求
+
+- **Windows 系统**：凭据存储使用 Windows DPAPI，定时运行使用 Windows 任务计划程序。请使用 Windows 原生 Python；不支持在 WSL、Linux 或 macOS 中安装运行。
+- **Python 3.10 或更高版本**：安装包含 `pythonw.exe` 的 Windows 原生 Python，并确保命令行能够找到 `py` 或 `python`。无需安装第三方 Python 包。
+- **校园网接入与账号**：电脑已连接中南大学校园网，能够访问 `portal.csu.edu.cn` 的 HTTPS 服务及 802 端口，并持有可用的校园网账号和密码。目前仅支持已核对的有线接入环境、`login_method=1`；无线接入或需要选择运营商的环境尚未验证。
+- **本机目录与任务权限**：下载或 clone 完整仓库，放在当前 Windows 用户可写的固定目录；当前用户需要有创建计划任务的权限，系统任务计划程序服务需可用。安装后请保留目录位置，否则计划任务无法找到脚本。
+- **使用同一 Windows 用户**：首次配置和后续运行使用同一 Windows 用户。任务仅在该用户登录 Windows 时运行，关机或退出 Windows 登录期间不会运行。
+
+`setup.cmd` 不会自动安装 Python。安装 Python 后，可在命令提示符中运行 `py -3 --version` 或 `python --version`，确认可启动的版本为 3.10 或更高，再双击 setup。
+
 ## 使用
 
-1. 安装 Windows 原生 Python 3.10 或更高版本。
-2. 下载仓库文件，保存在固定目录。
+1. 确认满足上述前置要求。
+2. 下载或 clone 完整仓库，保存在固定目录。
 3. 双击 `setup.cmd`，在本机输入校园网账号和密码。
 
 首次配置后后台任务自动运行。密码通过当前 Windows 用户的 DPAPI 加密保存，后续无需手动输入；修改密码时重新运行 `setup.cmd`。
