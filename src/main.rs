@@ -28,6 +28,7 @@ use windows_sys::Win32::{
 const PORTAL: &str = "https://portal.csu.edu.cn";
 const API: &str = "https://portal.csu.edu.cn:802/eportal/portal/";
 const TASK_NAME: &str = "CSU-Portal-Watchdog";
+const BACKGROUND_EXE: &str = "csu-portal-watchdog-background.exe";
 type Result<T> = std::result::Result<T, &'static str>;
 type Parameters = Vec<(String, String)>;
 
@@ -631,7 +632,7 @@ fn xml_escape(text: &str) -> String {
 
 fn task_xml(paths: &Paths, sid: &str) -> Vec<u8> {
     let start = (Local::now() + ChronoDuration::minutes(1)).format("%Y-%m-%dT%H:%M:%S%:z");
-    let executable = xml_escape(&paths.exe.to_string_lossy());
+    let executable = xml_escape(&paths.exe.with_file_name(BACKGROUND_EXE).to_string_lossy());
     let directory = xml_escape(&paths.directory.to_string_lossy());
     let sid = xml_escape(sid);
     let xml = format!(
@@ -658,6 +659,9 @@ fn windows_command(program: &str, arguments: &[&str]) -> Result<Output> {
 }
 
 fn install(paths: &Paths) -> Result<()> {
+    if !paths.exe.with_file_name(BACKGROUND_EXE).is_file() {
+        return Err("找不到后台启动程序，请下载完整仓库");
+    }
     load_credentials(paths)?;
     let who = windows_command("whoami.exe", &["/user", "/fo", "csv", "/nh"])?;
     let text = String::from_utf8_lossy(&who.stdout);
@@ -1022,7 +1026,7 @@ mod tests {
         let xml = String::from_utf16(&units).unwrap();
         assert!(xml.contains(&format!(
             "<Command>{}</Command>",
-            xml_escape(&paths.exe.to_string_lossy())
+            xml_escape(&paths.exe.with_file_name(BACKGROUND_EXE).to_string_lossy())
         )));
         assert!(xml.contains("<Arguments>once</Arguments>"));
         assert!(xml.contains("<Interval>PT5M</Interval>"));

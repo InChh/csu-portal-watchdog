@@ -17,7 +17,9 @@
 2. 下载或 clone 完整仓库，保存在固定目录。
 3. 双击 `setup.cmd`，在本机输入校园网账号和密码。
 
-同目录的 `csu-portal-watchdog.exe` 用于配置、手动操作和计划任务运行，允许显示控制台窗口。
+`csu-portal-watchdog.exe` 用于配置和手动操作，保留控制台输出。同目录的 `csu-portal-watchdog-background.exe` 供计划任务静默运行，定时检查不会弹出命令行窗口；请保留两个 EXE。
+
+已安装过计划任务的使用者，更新文件后执行一次 `./csu-portal-watchdog.exe install`，即可启用静默运行，使用已保存的凭据。
 
 首次配置后后台任务自动运行。密码通过当前 Windows 用户的 DPAPI 加密保存，后续无需手动输入；修改密码时重新运行 `setup.cmd`。
 
@@ -46,6 +48,7 @@ cargo test --locked
 ```bash
 cargo build --release --locked
 cp target/release/csu-portal-watchdog.exe .
+cp target/release/csu-portal-watchdog-background.exe .
 ```
 
 构建输出位于被 Git 忽略的 `target/`。程序目录、账号、终端地址和 Windows 用户标识均在本机配置或运行时取得。
